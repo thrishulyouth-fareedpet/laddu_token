@@ -343,7 +343,7 @@
 
         <section id="payment-result" class="payment-panel hidden" aria-labelledby="payment-title">
           <h2 id="payment-title">Your link is ready</h2>
-          <p>Use the button on a mobile device with a UPI app, or scan the QR code from another screen.</p>
+          <p>On Android, open this page in Chrome with PhonePe installed. On other devices, use a compatible UPI app or scan the QR code.</p>
           <a id="pay-link" class="pay-link" href="#">Pay <span id="pay-amount"></span> via UPI</a>
           <div class="qr-frame" id="qr-frame">
             <div id="qrcode" aria-label="UPI payment QR code"></div>
@@ -464,8 +464,9 @@
         ['tn', note]
       ].map(([key, value]) => `${key}=${encodeUpiValue(value)}`).join('&');
       const paymentUri = `upi://pay?${upiLink}`;
+      const phonePeIntent = `intent://pay?${upiLink}#Intent;scheme=upi;package=com.phonepe.app;end`;
 
-      payLink.href = paymentUri;
+      payLink.href = /Android/i.test(navigator.userAgent) ? phonePeIntent : paymentUri;
       payAmount.textContent = `₹${order.amount}`;
       qrCode.replaceChildren();
       qrFallback.classList.add('hidden');
