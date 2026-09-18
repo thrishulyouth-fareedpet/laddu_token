@@ -404,6 +404,10 @@
       formError.textContent = message;
     }
 
+    function encodeUpiValue(value) {
+      return encodeURIComponent(value);
+    }
+
     nameInput.addEventListener('input', () => {
       showFormError('');
       updateTotal();
@@ -452,23 +456,23 @@
       if (!order) return;
 
       const note = `Laddu-Token-${order.name}-${order.entries}entries`;
-      const query = new URLSearchParams({
-        pa: MERCHANT_UPI_ID,
-        pn: PAYEE_NAME,
-        am: order.amount.toFixed(2),
-        cu: 'INR',
-        tn: note
-      });
-      const upiLink = `upi://pay?${query.toString()}`;
+      const upiLink = [
+        ['pa', MERCHANT_UPI_ID],
+        ['pn', PAYEE_NAME],
+        ['am', order.amount.toFixed(2)],
+        ['cu', 'INR'],
+        ['tn', note]
+      ].map(([key, value]) => `${key}=${encodeUpiValue(value)}`).join('&');
+      const paymentUri = `upi://pay?${upiLink}`;
 
-      payLink.href = upiLink;
+      payLink.href = paymentUri;
       payAmount.textContent = `₹${order.amount}`;
       qrCode.replaceChildren();
       qrFallback.classList.add('hidden');
 
       if (typeof QRCode === 'function') {
         new QRCode(qrCode, {
-          text: upiLink,
+          text: paymentUri,
           width: 200,
           height: 200,
           colorDark: '#3e2114',
