@@ -7,17 +7,17 @@
   <title>Laddu Token | Practice Demo</title>
   <style>
     :root {
-      --ink: #3e2114;
-      --muted: #795443;
-      --cream: #fff9ed;
-      --paper: #fffdf8;
-      --orange: #ed6b2f;
-      --orange-dark: #b6461c;
-      --saffron: #f5aa23;
-      --gold: #ffd66b;
-      --line: #f1d8ae;
-      --green: #2e7d52;
-      --shadow: 0 24px 70px rgba(104, 51, 20, 0.15);
+      --ink: #4c1022;
+      --muted: #72515b;
+      --cream: #fffaf7;
+      --paper: #ffffff;
+      --orange: #e17b21;
+      --orange-dark: #b85a18;
+      --saffron: #eea62d;
+      --gold: #f8cc61;
+      --line: #ead7d2;
+      --green: #467b47;
+      --shadow: 0 24px 70px rgba(76, 16, 34, 0.12);
     }
 
     * { box-sizing: border-box; }
@@ -27,9 +27,9 @@
       margin: 0;
       color: var(--ink);
       background:
-        radial-gradient(circle at 10% 8%, rgba(255, 214, 107, 0.72) 0 10%, transparent 25%),
-        radial-gradient(circle at 94% 18%, rgba(237, 107, 47, 0.2) 0 8%, transparent 25%),
-        linear-gradient(135deg, #fff4d8 0%, #fffaf0 47%, #ffe9c1 100%);
+        radial-gradient(circle at 8% 18%, rgba(238, 166, 45, 0.15) 0 10%, transparent 26%),
+        radial-gradient(circle at 96% 84%, rgba(70, 123, 71, 0.12) 0 9%, transparent 23%),
+        linear-gradient(135deg, #fffefd 0%, #fff9f5 54%, #f9f1ee 100%);
       font-family: Georgia, 'Times New Roman', serif;
     }
 
@@ -37,9 +37,9 @@
       position: fixed;
       inset: 0;
       z-index: -1;
-      opacity: 0.24;
-      background-image: radial-gradient(#d77b33 0.7px, transparent 0.7px);
-      background-size: 18px 18px;
+      opacity: 0.18;
+      background-image: radial-gradient(#8c4051 0.6px, transparent 0.6px);
+      background-size: 22px 22px;
       content: '';
       pointer-events: none;
     }
@@ -54,34 +54,36 @@
     .card {
       width: min(100%, 560px);
       overflow: hidden;
-      border: 1px solid rgba(184, 101, 37, 0.18);
-      border-radius: 20px;
-      background: rgba(255, 253, 248, 0.94);
+      border: 1px solid rgba(76, 16, 34, 0.13);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
       box-shadow: var(--shadow);
     }
 
     .card-header {
       position: relative;
-      padding: 34px 30px 28px;
-      color: #fffaf1;
-      background: linear-gradient(145deg, #bd481c, #ed6b2f 62%, #f5a929);
+      padding: 32px 30px 30px;
+      color: var(--ink);
+      background: #fff;
+      border-bottom: 4px solid var(--saffron);
+      text-align: center;
     }
 
     .card-header::after {
       position: absolute;
       right: 28px;
-      bottom: -23px;
-      width: 78px;
-      height: 78px;
-      border: 10px dotted rgba(255, 250, 225, 0.65);
+      bottom: -14px;
+      width: 56px;
+      height: 56px;
+      border: 7px dotted rgba(70, 123, 71, 0.45);
       border-radius: 50%;
       content: '';
       transform: rotate(10deg);
     }
 
     .eyebrow {
-      margin: 0 0 8px;
-      color: #ffe7a6;
+      margin: 0 0 14px;
+      color: var(--orange);
       font-family: 'Trebuchet MS', sans-serif;
       font-size: 0.72rem;
       font-weight: 700;
@@ -92,18 +94,39 @@
     h1 {
       max-width: 360px;
       margin: 0;
-      font-size: clamp(2.25rem, 10vw, 3.7rem);
+      font-size: clamp(2rem, 9vw, 3rem);
       line-height: 0.95;
       letter-spacing: 0;
+    }
+
+    .brand-logo {
+      display: block;
+      width: min(100%, 190px);
+      height: auto;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      mix-blend-mode: multiply;
+    }
+
+    .brand-lockup {
+      margin: 13px 0 0;
+      color: var(--orange);
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
     }
 
     .header-copy {
       max-width: 350px;
       margin: 16px 0 0;
-      color: #fff3d3;
+      color: var(--muted);
       font-family: 'Trebuchet MS', sans-serif;
       font-size: 0.96rem;
       line-height: 1.5;
+      margin-right: auto;
+      margin-left: auto;
     }
 
     .content {
@@ -152,7 +175,7 @@
       border: 1.5px solid var(--line);
       border-radius: 10px;
       color: var(--ink);
-      background: #fffaf0;
+      background: #fffdfc;
       font: 1rem 'Trebuchet MS', sans-serif;
       outline: none;
       transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
@@ -161,7 +184,7 @@
     input:focus {
       border-color: var(--orange);
       background: #fff;
-      box-shadow: 0 0 0 4px rgba(237, 107, 47, 0.14);
+      box-shadow: 0 0 0 4px rgba(225, 123, 33, 0.14);
     }
 
     .field-hint {
@@ -178,9 +201,9 @@
       gap: 16px;
       margin: 26px 0 20px;
       padding: 17px 18px;
-      border: 1px solid #f6d37e;
-      border-radius: 12px;
-      background: #fff3c8;
+      border: 1px solid #efdba9;
+      border-radius: 7px;
+      background: #fff9e9;
       font-family: 'Trebuchet MS', sans-serif;
     }
 
@@ -197,7 +220,7 @@
       border-radius: 10px;
       color: #fff;
       background: var(--orange);
-      box-shadow: 0 8px 16px rgba(182, 70, 28, 0.18);
+      box-shadow: 0 8px 16px rgba(76, 16, 34, 0.14);
       cursor: pointer;
       font: 700 0.93rem 'Trebuchet MS', sans-serif;
       text-decoration: none;
@@ -216,7 +239,7 @@
       box-shadow: none;
     }
 
-    .secondary-action:hover:not(:disabled) { background: #fff5dd; }
+    .secondary-action:hover:not(:disabled) { background: #fff8ed; }
 
     .error {
       min-height: 1.15em;
@@ -232,9 +255,9 @@
       gap: 11px;
       margin: 0 0 22px;
       padding: 18px;
-      border-left: 4px solid var(--saffron);
+      border-left: 4px solid var(--orange);
       border-radius: 0 10px 10px 0;
-      background: #fff7e2;
+      background: #fff9ed;
       font-family: 'Trebuchet MS', sans-serif;
     }
 
@@ -271,7 +294,7 @@
       padding: 14px 15px;
       border-radius: 10px;
       color: #6c4a31;
-      background: #fff7e6;
+      background: #fffaf5;
       font: 0.75rem/1.5 'Trebuchet MS', sans-serif;
       text-align: left;
     }
@@ -294,6 +317,7 @@
     <article class="card">
       <header class="card-header">
         <p class="eyebrow">A practice payment demo</p>
+        <img class="brand-logo" src="WhatsApp%20Image%202026-09-18%20at%205.40.19%20PM.jpeg" alt="Thrishul Youths logo">
         <h1>Laddu Token</h1>
         <p class="header-copy">Reserve your entries with a little sweetness. Each token is ₹20.</p>
       </header>
