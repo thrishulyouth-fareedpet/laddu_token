@@ -391,9 +391,9 @@
           </div>
           <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
           <div id="app-links" class="app-links hidden" aria-label="Payment apps">
-            <button id="gpay-link" class="app-link" type="button"><span class="app-badge gpay-badge" aria-hidden="true">G</span><span>Open GPay</span></button>
-            <button id="phonepe-link" class="app-link" type="button"><span class="app-badge phonepe-badge" aria-hidden="true">P</span><span>Open PhonePe</span></button>
-            <button id="paytm-link" class="app-link" type="button"><span class="app-badge paytm-badge" aria-hidden="true">Pay</span><span>Open Paytm</span></button>
+            <a id="gpay-link" class="app-link" href="tez://"><span class="app-badge gpay-badge" aria-hidden="true">G</span><span>Open GPay</span></a>
+            <a id="phonepe-link" class="app-link" href="phonepe://"><span class="app-badge phonepe-badge" aria-hidden="true">P</span><span>Open PhonePe</span></a>
+            <a id="paytm-link" class="app-link" href="paytmmp://"><span class="app-badge paytm-badge" aria-hidden="true">Pay</span><span>Open Paytm</span></a>
           </div>
           <p id="app-note" class="app-note hidden">The app opens without payment details. Paste the copied UPI ID and enter the displayed amount.</p>
           <div class="qr-frame" id="qr-frame">
@@ -468,14 +468,6 @@
       return encodeURIComponent(value);
     }
 
-    function openPaymentApp(scheme, appName) {
-      copyStatus.textContent = `Opening ${appName}. Paste the copied UPI ID and enter the amount.`;
-      window.location.href = scheme;
-      window.setTimeout(() => {
-        copyStatus.textContent = `${appName} did not open. Open it manually and paste the copied UPI ID.`;
-      }, 1200);
-    }
-
     function setQrDownloadLink() {
       const qrCanvas = qrCode.querySelector('canvas');
       const qrImage = qrCode.querySelector('img');
@@ -503,10 +495,6 @@
         copyStatus.textContent = `Copy it manually: ${MERCHANT_UPI_ID}`;
       }
     });
-
-    gpayLink.addEventListener('click', () => openPaymentApp('tez://', 'GPay'));
-    phonePeLink.addEventListener('click', () => openPaymentApp('phonepe://', 'PhonePe'));
-    paytmLink.addEventListener('click', () => openPaymentApp('paytmmp://', 'Paytm'));
 
     nameInput.addEventListener('input', () => {
       showFormError('');
