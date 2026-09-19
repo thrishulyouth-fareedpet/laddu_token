@@ -197,7 +197,7 @@
     .amount-strip span { font-size: 0.83rem; font-weight: 700; }
     .amount-strip strong { color: var(--orange-dark); font-size: 1.55rem; }
 
-    button, .pay-link {
+    button, .app-link, .download-qr {
       display: inline-flex;
       width: 100%;
       min-height: 54px;
@@ -214,8 +214,8 @@
       transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
     }
 
-    button:hover:not(:disabled), .pay-link:hover { background: var(--orange-dark); transform: translateY(-1px); }
-    button:focus-visible, .pay-link:focus-visible { outline: 3px solid rgba(245, 170, 35, 0.65); outline-offset: 3px; }
+    button:hover:not(:disabled), .app-link:hover, .download-qr:hover { background: var(--orange-dark); transform: translateY(-1px); }
+    button:focus-visible, .app-link:focus-visible, .download-qr:focus-visible { outline: 3px solid rgba(245, 170, 35, 0.65); outline-offset: 3px; }
     button:disabled { cursor: not-allowed; opacity: 0.48; box-shadow: none; }
 
     .secondary-action {
@@ -261,6 +261,40 @@
     .payment-panel h2 { margin: 0 0 8px; font-size: 1.55rem; }
     .payment-panel p { margin: 0 auto 18px; color: var(--muted); font: 0.86rem/1.5 'Trebuchet MS', sans-serif; }
 
+    .upi-details {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 20px 0 18px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffaf5;
+      text-align: left;
+    }
+
+    .upi-details span { color: var(--muted); font: 0.74rem 'Trebuchet MS', sans-serif; }
+    .upi-details strong { display: block; margin-top: 3px; color: var(--ink); font: 700 0.96rem 'Trebuchet MS', sans-serif; overflow-wrap: anywhere; }
+
+    .copy-button {
+      width: auto;
+      min-width: 78px;
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: #fff;
+      box-shadow: none;
+      font-size: 0.78rem;
+    }
+
+    .copy-button:hover:not(:disabled) { color: #fff; }
+    .copy-status { min-height: 1.2em; margin: -8px 0 14px !important; color: var(--green) !important; font-size: 0.76rem !important; }
+
+    .app-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 18px; }
+    .app-link { min-height: 48px; padding: 8px; font-size: 0.78rem; text-align: center; }
+
     .qr-frame {
       display: grid;
       min-height: 228px;
@@ -275,6 +309,7 @@
 
     #qrcode img, #qrcode canvas { display: block; max-width: 100%; height: auto !important; }
     .qr-fallback { color: var(--muted); font: 0.82rem/1.45 'Trebuchet MS', sans-serif; }
+    .download-qr { width: min(100%, 240px); min-height: 45px; margin: 0 auto 18px; font-size: 0.8rem; }
 
     .fine-print {
       margin: 22px 0 0;
@@ -337,19 +372,29 @@
             <div class="summary-row"><span>Entries</span><strong id="summary-entries"></strong></div>
             <div class="summary-row"><span>Total</span><strong id="summary-total"></strong></div>
           </div>
-          <button id="generate-button" type="button">Generate payment link</button>
+          <button id="generate-button" type="button">Show payment options</button>
           <button id="edit-button" class="secondary-action" type="button">Edit entries</button>
         </section>
 
         <section id="payment-result" class="payment-panel hidden" aria-labelledby="payment-title">
           <h2 id="payment-title">Your link is ready</h2>
-          <p>On Android, open this page in Chrome with PhonePe installed. On other devices, use a compatible UPI app or scan the QR code.</p>
-          <a id="pay-link" class="pay-link" href="#">Pay <span id="pay-amount"></span> via UPI</a>
+          <p>Choose an installed payment app, or copy the UPI ID and enter the amount manually.</p>
+          <div class="upi-details">
+            <div><span>Merchant UPI ID</span><strong id="merchant-upi-id"></strong></div>
+            <button id="copy-upi-button" class="copy-button" type="button">Copy</button>
+          </div>
+          <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+          <div class="app-links" aria-label="Payment apps">
+            <a id="gpay-link" class="app-link" href="#">Open GPay</a>
+            <a id="phonepe-link" class="app-link" href="#">Open PhonePe</a>
+            <a id="paytm-link" class="app-link" href="#">Open Paytm</a>
+          </div>
           <div class="qr-frame" id="qr-frame">
             <div id="qrcode" aria-label="UPI payment QR code"></div>
-            <p id="qr-fallback" class="qr-fallback hidden">The QR code could not load. Use the payment button on a device with a UPI app.</p>
+            <p id="qr-fallback" class="qr-fallback hidden">The QR code could not load. Copy the UPI ID and pay manually in your app.</p>
           </div>
-          <p class="success-note">If the button does not open your UPI app, scan the QR code instead.</p>
+          <a id="download-qr" class="download-qr" href="#" download="laddu-token-payment-qr.png">Download QR code</a>
+          <p class="success-note">If an app button does not open, copy the UPI ID and pay manually in your app.</p>
           <p class="fine-print"><strong>Practice demo:</strong> After paying, please screenshot your payment confirmation. This page cannot verify payments automatically. It has no backend, database, authentication, or payment gateway.</p>
         </section>
       </div>
@@ -378,10 +423,15 @@
     const summaryTotal = document.querySelector('#summary-total');
     const generateButton = document.querySelector('#generate-button');
     const editButton = document.querySelector('#edit-button');
-    const payLink = document.querySelector('#pay-link');
-    const payAmount = document.querySelector('#pay-amount');
+    const merchantUpiId = document.querySelector('#merchant-upi-id');
+    const copyUpiButton = document.querySelector('#copy-upi-button');
+    const copyStatus = document.querySelector('#copy-status');
+    const gpayLink = document.querySelector('#gpay-link');
+    const phonePeLink = document.querySelector('#phonepe-link');
+    const paytmLink = document.querySelector('#paytm-link');
     const qrCode = document.querySelector('#qrcode');
     const qrFallback = document.querySelector('#qr-fallback');
+    const downloadQr = document.querySelector('#download-qr');
 
     let order = null;
 
@@ -407,6 +457,35 @@
     function encodeUpiValue(value) {
       return encodeURIComponent(value);
     }
+
+    function appPaymentUri(scheme, upiLink) {
+      return `${scheme}${upiLink}`;
+    }
+
+    function setQrDownloadLink() {
+      const qrCanvas = qrCode.querySelector('canvas');
+      const qrImage = qrCode.querySelector('img');
+      const qrDataUrl = qrCanvas ? qrCanvas.toDataURL('image/png') : qrImage?.src;
+
+      if (qrDataUrl) {
+        downloadQr.href = qrDataUrl;
+        downloadQr.classList.remove('hidden');
+      } else {
+        downloadQr.removeAttribute('href');
+        downloadQr.classList.add('hidden');
+      }
+    }
+
+    merchantUpiId.textContent = MERCHANT_UPI_ID;
+
+    copyUpiButton.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(MERCHANT_UPI_ID);
+        copyStatus.textContent = 'UPI ID copied.';
+      } catch {
+        copyStatus.textContent = `Copy failed. UPI ID: ${MERCHANT_UPI_ID}`;
+      }
+    });
 
     nameInput.addEventListener('input', () => {
       showFormError('');
@@ -464,12 +543,14 @@
         ['tn', note]
       ].map(([key, value]) => `${key}=${encodeUpiValue(value)}`).join('&');
       const paymentUri = `upi://pay?${upiLink}`;
-      const phonePeIntent = `intent://pay?${upiLink}#Intent;scheme=upi;package=com.phonepe.app;end`;
+      const upiIdOnly = `pa=${encodeUpiValue(MERCHANT_UPI_ID)}`;
 
-      payLink.href = /Android/i.test(navigator.userAgent) ? phonePeIntent : paymentUri;
-      payAmount.textContent = `₹${order.amount}`;
+      gpayLink.href = appPaymentUri('tez://upi/pay?', upiIdOnly);
+      phonePeLink.href = appPaymentUri('phonepe://pay?', upiIdOnly);
+      paytmLink.href = appPaymentUri('paytmmp://pay?', upiIdOnly);
       qrCode.replaceChildren();
       qrFallback.classList.add('hidden');
+      downloadQr.classList.add('hidden');
 
       if (typeof QRCode === 'function') {
         new QRCode(qrCode, {
@@ -480,6 +561,7 @@
           colorLight: '#ffffff',
           correctLevel: QRCode.CorrectLevel.M
         });
+        setQrDownloadLink();
       } else {
         qrFallback.classList.remove('hidden');
       }
