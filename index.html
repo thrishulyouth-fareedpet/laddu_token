@@ -412,9 +412,9 @@
           <div id="app-popover" class="app-popover hidden" role="dialog" aria-label="Choose a payment app">
             <button id="close-app-popover" class="app-popover-close" type="button" aria-label="Close payment app options">&times;</button>
             <p class="app-popover-title">UPI ID copied</p>
-            <p id="app-note" class="app-note">Open an app below, paste the copied UPI ID, and enter the displayed amount to pay.</p>
+            <p id="app-note" class="app-note">Paste the copied UPI ID into your chosen app and enter the displayed amount. On iPhone, the PhonePe option opens the App Store search if iOS cannot open PhonePe directly.</p>
             <div id="app-links" class="app-links" aria-label="Payment apps">
-              <a id="gpay-link" class="app-link" href="intent://#Intent;scheme=tez;package=com.google.android.apps.walletnfcrel;end"><span class="app-badge gpay-badge" aria-hidden="true">G</span><span>Open GPay</span></a>
+              <a id="gpay-link" class="app-link" href="intent://upi/pay#Intent;scheme=tez;package=com.google.android.apps.walletnfcrel;end"><span class="app-badge gpay-badge" aria-hidden="true">G</span><span>Open GPay</span></a>
               <a id="phonepe-link" class="app-link" href="phonepe://pay"><span class="app-badge phonepe-badge" aria-hidden="true">P</span><span>Open PhonePe</span></a>
               <a id="paytm-link" class="app-link" href="intent://#Intent;package=net.one97.paytm;end"><span class="app-badge paytm-badge" aria-hidden="true">Pay</span><span>Open Paytm</span></a>
             </div>
@@ -434,7 +434,7 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script>
     // Replace these sample values for local experimentation. This page does not process real payments.
-    const MERCHANT_UPI_ID = 'q40416933@ybl';
+    const MERCHANT_UPI_ID = 'abhishekabsk28@ybl';
     const PAYEE_NAME = 'Laddu Token Demo';
     const PRICE_PER_ENTRY = 20;
     const MAX_ENTRIES = 50;
@@ -491,6 +491,20 @@
       return encodeURIComponent(value);
     }
 
+    function setAppLinksForPlatform() {
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      gpayLink.href = isAndroid
+        ? 'intent://upi/pay#Intent;scheme=tez;package=com.google.android.apps.walletnfcrel;end'
+        : 'tez://upi/pay';
+      phonePeLink.href = isIOS
+        ? 'https://apps.apple.com/in/search?term=PhonePe'
+        : 'phonepe://pay';
+      paytmLink.href = isAndroid
+        ? 'intent://#Intent;package=net.one97.paytm;end'
+        : 'paytmmp://pay';
+    }
+
     function setQrDownloadLink() {
       const qrCanvas = qrCode.querySelector('canvas');
       const qrImage = qrCode.querySelector('img');
@@ -506,6 +520,7 @@
     }
 
     merchantUpiId.textContent = MERCHANT_UPI_ID;
+    setAppLinksForPlatform();
 
     copyUpiButton.addEventListener('click', async () => {
       appPopover.classList.remove('hidden');
