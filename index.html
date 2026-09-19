@@ -3,579 +3,135 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Laddu Token practice payment demo">
-  <title>Laddu Token | Practice Demo</title>
+  <meta name="description" content="Thrishul Youth is a Ganapati youth group growing greener celebrations and kinder communities.">
+  <title>Thrishul Youth | Eco-friendly Ganapati celebrations</title>
+  <link rel="icon" href="logo.jpeg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --ink: #4c1022;
-      --muted: #72515b;
-      --cream: #fffaf7;
-      --paper: #ffffff;
-      --orange: #e17b21;
-      --orange-dark: #b85a18;
-      --saffron: #eea62d;
-      --gold: #f8cc61;
-      --line: #ead7d2;
-      --green: #467b47;
-      --shadow: 0 24px 70px rgba(76, 16, 34, 0.12);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      min-width: 320px;
-      margin: 0;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 8% 18%, rgba(238, 166, 45, 0.15) 0 10%, transparent 26%),
-        radial-gradient(circle at 96% 84%, rgba(70, 123, 71, 0.12) 0 9%, transparent 23%),
-        linear-gradient(135deg, #fffefd 0%, #fff9f5 54%, #f9f1ee 100%);
-      font-family: Georgia, 'Times New Roman', serif;
-    }
-
-    body::before {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      opacity: 0.18;
-      background-image: radial-gradient(#8c4051 0.6px, transparent 0.6px);
-      background-size: 22px 22px;
-      content: '';
-      pointer-events: none;
-    }
-
-    .page-shell {
-      display: grid;
-      min-height: 100vh;
-      place-items: center;
-      padding: 32px 16px;
-    }
-
-    .card {
-      width: min(100%, 560px);
-      overflow: hidden;
-      border: 1px solid rgba(76, 16, 34, 0.13);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.95);
-      box-shadow: var(--shadow);
-    }
-
-    .card-header {
-      padding: 26px 30px 28px;
-      color: var(--ink);
-      background: #fff;
-      border-bottom: 4px solid var(--saffron);
-      text-align: center;
-    }
-
-    .eyebrow {
-      margin: 0 0 8px;
-      color: var(--orange);
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      max-width: 360px;
-      margin: 0 auto;
-      font-size: clamp(2rem, 9vw, 3rem);
-      line-height: 0.95;
-      letter-spacing: 0;
-    }
-
-    .brand-logo {
-      display: block;
-      width: min(100%, 180px);
-      height: auto;
-      margin: 0 auto 4px;
-      border-radius: 50%;
-      mix-blend-mode: multiply;
-    }
-
-    .brand-lockup {
-      margin: 13px 0 0;
-      color: var(--orange);
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-    }
-
-    .header-copy {
-      max-width: 350px;
-      margin: 16px 0 0;
-      color: var(--muted);
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: 0.96rem;
-      line-height: 1.5;
-      margin-right: auto;
-      margin-left: auto;
-    }
-
-    .content {
-      padding: 34px 30px 30px;
-    }
-
-    .step-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 22px;
-      color: var(--orange-dark);
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: 0.76rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .step-label::before {
-      display: inline-grid;
-      width: 26px;
-      height: 26px;
-      place-items: center;
-      border-radius: 50%;
-      color: #fff;
-      background: var(--orange);
-      content: '1';
-      font-size: 0.75rem;
-    }
-
-    .field { margin-bottom: 21px; }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    input {
-      width: 100%;
-      min-height: 52px;
-      padding: 12px 15px;
-      border: 1.5px solid var(--line);
-      border-radius: 10px;
-      color: var(--ink);
-      background: #fffdfc;
-      font: 1rem 'Trebuchet MS', sans-serif;
-      outline: none;
-      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
-    }
-
-    input:focus {
-      border-color: var(--orange);
-      background: #fff;
-      box-shadow: 0 0 0 4px rgba(225, 123, 33, 0.14);
-    }
-
-    .field-hint {
-      display: block;
-      margin-top: 7px;
-      color: var(--muted);
-      font: 0.76rem 'Trebuchet MS', sans-serif;
-    }
-
-    .amount-strip {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 26px 0 20px;
-      padding: 17px 18px;
-      border: 1px solid #efdba9;
-      border-radius: 7px;
-      background: #fff9e9;
-      font-family: 'Trebuchet MS', sans-serif;
-    }
-
-    .amount-strip span { font-size: 0.83rem; font-weight: 700; }
-    .amount-strip strong { color: var(--orange-dark); font-size: 1.55rem; }
-
-    button, .app-link, .download-qr {
-      display: inline-flex;
-      width: 100%;
-      min-height: 54px;
-      align-items: center;
-      justify-content: center;
-      border: 0;
-      border-radius: 10px;
-      color: #fff;
-      background: var(--orange);
-      box-shadow: 0 8px 16px rgba(76, 16, 34, 0.14);
-      cursor: pointer;
-      font: 700 0.93rem 'Trebuchet MS', sans-serif;
-      text-decoration: none;
-      transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
-    }
-
-    button:hover:not(:disabled), .app-link:hover, .download-qr:hover { background: var(--orange-dark); transform: translateY(-1px); }
-    button:focus-visible, .app-link:focus-visible, .download-qr:focus-visible { outline: 3px solid rgba(245, 170, 35, 0.65); outline-offset: 3px; }
-    button:disabled { cursor: not-allowed; opacity: 0.48; box-shadow: none; }
-
-    .secondary-action {
-      margin-top: 12px;
-      color: var(--orange-dark);
-      background: transparent;
-      border: 1px solid var(--line);
-      box-shadow: none;
-    }
-
-    .secondary-action:hover:not(:disabled) { background: #fff8ed; }
-
-    .error {
-      min-height: 1.15em;
-      margin: -10px 0 14px;
-      color: #a1271d;
-      font: 0.78rem 'Trebuchet MS', sans-serif;
-    }
-
-    .hidden { display: none !important; }
-
-    .summary {
-      display: grid;
-      gap: 11px;
-      margin: 0 0 22px;
-      padding: 18px;
-      border-left: 4px solid var(--orange);
-      border-radius: 0 10px 10px 0;
-      background: #fff9ed;
-      font-family: 'Trebuchet MS', sans-serif;
-    }
-
-    .summary-row { display: flex; justify-content: space-between; gap: 16px; font-size: 0.88rem; }
-    .summary-row strong { text-align: right; overflow-wrap: anywhere; }
-
-    .payment-panel {
-      margin-top: 22px;
-      padding-top: 24px;
-      border-top: 1px solid var(--line);
-      text-align: center;
-    }
-
-    .payment-panel h2 { margin: 0 0 8px; font-size: 1.55rem; }
-    .payment-panel p { margin: 0 auto 18px; color: var(--muted); font: 0.86rem/1.5 'Trebuchet MS', sans-serif; }
-
-    .upi-details {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin: 20px 0 18px;
-      padding: 13px 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fffaf5;
-      text-align: left;
-    }
-
-    .upi-details span { color: var(--muted); font: 0.74rem 'Trebuchet MS', sans-serif; }
-    .upi-details strong { display: block; margin-top: 3px; color: var(--ink); font: 700 0.96rem 'Trebuchet MS', sans-serif; overflow-wrap: anywhere; }
-
-    .copy-button {
-      width: auto;
-      min-width: 78px;
-      min-height: 40px;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      color: var(--ink);
-      background: #fff;
-      box-shadow: none;
-      font-size: 0.78rem;
-    }
-
-    .copy-button:hover:not(:disabled) { color: #fff; }
-    .copy-status { min-height: 1.2em; margin: -8px 0 14px !important; color: var(--green) !important; font-size: 0.76rem !important; }
-
-    .app-links { display: flex; justify-content: center; gap: 9px; margin-bottom: 18px; }
-    .app-link { width: 120px; min-height: 76px; padding: 10px 7px; flex-direction: column; gap: 6px; color: var(--ink); background: transparent; box-shadow: none; font-size: 0.74rem; text-align: center; }
-    .app-link:hover { color: var(--orange-dark); background: transparent; box-shadow: none; transform: none; }
-    .app-logo { display: block; width: 36px; height: 36px; object-fit: contain; }
-    .app-link span:last-child { color: inherit; }
-    .app-popover {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      z-index: 20;
-      width: min(calc(100% - 32px), 420px);
-      margin: 0;
-      padding: 15px;
-      border: 1px solid #efdba9;
-      border-radius: 10px;
-      background: #fff9e9;
-      box-shadow: 0 10px 24px rgba(76, 16, 34, 0.1);
-      text-align: left;
-      transform: translate(-50%, -50%);
-    }
-
-    .app-popover-close { float: right; width: 30px; min-height: 30px; padding: 0; color: var(--ink); background: transparent; box-shadow: none; font-size: 1.1rem; }
-    .app-popover-close:hover:not(:disabled) { color: var(--orange-dark); background: transparent; transform: none; }
-    .app-popover-title { margin: 0 35px 5px 0 !important; color: var(--ink) !important; font-size: 0.88rem !important; font-weight: 700; }
-    .app-note { margin: 0 0 13px !important; color: var(--muted); font-size: 0.74rem !important; }
-
-    .qr-frame {
-      display: grid;
-      min-height: 228px;
-      place-items: center;
-      margin: 20px auto 15px;
-      padding: 14px;
-      width: min(100%, 240px);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fff;
-    }
-
-    #qrcode img, #qrcode canvas { display: block; max-width: 100%; height: auto !important; }
-    .qr-fallback { color: var(--muted); font: 0.82rem/1.45 'Trebuchet MS', sans-serif; }
-    .download-qr { width: min(100%, 240px); min-height: 45px; margin: 0 auto 18px; font-size: 0.8rem; }
-
-    .fine-print {
-      margin: 22px 0 0;
-      padding: 14px 15px;
-      border-radius: 10px;
-      color: #6c4a31;
-      background: #fffaf5;
-      font: 0.75rem/1.5 'Trebuchet MS', sans-serif;
-      text-align: left;
-    }
-
-    .fine-print strong { color: var(--ink); }
-    .success-note { color: var(--green); font-weight: 700; }
-
-    @media (max-width: 480px) {
-      .page-shell { padding: 14px 10px; }
-      .card-header, .content { padding-right: 21px; padding-left: 21px; }
-      .card-header { padding-top: 22px; }
-      .summary-row { align-items: flex-start; flex-direction: column; gap: 3px; }
-      .summary-row strong { text-align: left; }
-    }
+    :root { --ink:#17362b; --muted:#607066; --forest:#194d37; --leaf:#3c7a4d; --lime:#b9c95a; --saffron:#e7a33b; --clay:#b9563d; --paper:#f8f5ec; --cream:#fffdf8; --line:#d8ded2; --shadow:0 22px 55px rgba(23,54,43,.12); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-width:320px; overflow-x:hidden; color:var(--ink); background:var(--paper); font-family:'DM Sans',sans-serif; }
+    body::before { position:fixed; inset:0; z-index:-1; opacity:.2; background-image:radial-gradient(#799172 .6px,transparent .6px); background-size:21px 21px; content:''; pointer-events:none; }
+    a { color:inherit; }
+    .container { width:min(1160px,calc(100% - 40px)); margin:auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; padding:22px 0; }
+    .brand { display:flex; align-items:center; gap:11px; text-decoration:none; font-weight:800; letter-spacing:.02em; }
+    .brand img { width:62px; height:62px; border-radius:50%; object-fit:cover; box-shadow:0 7px 18px rgba(23,54,43,.16); }
+    .brand span { font-family:Manrope,sans-serif; font-size:.9rem; line-height:1.05; }
+    .brand small { display:block; margin-top:3px; color:var(--clay); font-size:.58rem; letter-spacing:.12em; }
+    nav { display:flex; align-items:center; gap:26px; color:var(--muted); font-size:.82rem; font-weight:600; }
+    nav a { text-decoration:none; }
+    nav a:hover { color:var(--clay); }
+    .nav-cta, .button { display:inline-flex; align-items:center; justify-content:center; min-height:45px; padding:0 18px; border:0; border-radius:5px; color:#fff; background:var(--forest); font:700 .8rem 'DM Sans',sans-serif; text-decoration:none; cursor:pointer; transition:transform .2s,background .2s; }
+    .nav-cta:hover,.button:hover { background:var(--clay); transform:translateY(-2px); }
+    .menu-button { display:none; border:0; color:var(--ink); background:transparent; font-size:1.5rem; cursor:pointer; }
+    .hero { display:grid; grid-template-columns:1.02fr .98fr; gap:52px; align-items:center; padding:55px 0 88px; }
+    .eyebrow { display:flex; align-items:center; gap:10px; margin:0 0 18px; color:var(--clay); font-size:.7rem; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+    .eyebrow::before { width:31px; height:2px; background:var(--saffron); content:''; }
+    h1,h2,h3 { margin:0; font-family:Manrope,sans-serif; letter-spacing:0; }
+    h1 { max-width:590px; font-size:clamp(3.1rem,7vw,6.8rem); line-height:.93; }
+    h1 em { color:var(--clay); font-style:normal; }
+    .hero-copy { max-width:480px; margin:25px 0 28px; color:var(--muted); font-size:1.02rem; line-height:1.7; }
+    .hero-actions { display:flex; align-items:center; gap:21px; }
+    .text-link { color:var(--forest); font-size:.82rem; font-weight:700; text-decoration:none; }
+    .text-link::after { margin-left:8px; content:'→'; }
+    .hero-art { position:relative; }
+    .hero-art::after { position:absolute; right:-18px; bottom:-18px; z-index:-1; width:56%; height:45%; border:1px solid var(--lime); border-radius:0 0 80px 0; content:''; }
+    .hero-image { display:block; width:100%; height:auto; border-radius:150px 10px 10px 10px; object-fit:contain; box-shadow:var(--shadow); }
+    .hero-stamp { position:absolute; right:-26px; top:32px; display:grid; width:104px; height:104px; place-items:center; border:1px solid #fff; border-radius:50%; color:var(--ink); background:var(--lime); font-family:Manrope,sans-serif; font-size:.72rem; line-height:1.25; text-align:center; transform:rotate(9deg); }
+    .hero-stamp strong { display:block; font-size:1.45rem; }
+    .section { padding:92px 0; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:30px; margin-bottom:37px; }
+    .section-head h2 { max-width:550px; font-size:clamp(2rem,4vw,3.65rem); line-height:1; }
+    .section-head p { max-width:310px; margin:0; color:var(--muted); font-size:.9rem; line-height:1.6; }
+    .mission-band { color:#fff; background:var(--forest); }
+    .mission-band .eyebrow { color:var(--lime); }
+    .mission-band .section-head p { color:#c5d7ca; }
+    .principles { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; border-top:1px solid rgba(255,255,255,.2); }
+    .principle { padding:28px 28px 8px 0; border-right:1px solid rgba(255,255,255,.2); }
+    .principle:not(:first-child) { padding-left:28px; }
+    .principle:last-child { border:0; }
+    .principle-number { color:var(--lime); font:800 2.4rem Manrope,sans-serif; }
+    .principle h3 { margin:14px 0 9px; font-size:1.05rem; }
+    .principle p { margin:0; color:#c5d7ca; font-size:.86rem; line-height:1.65; }
+    .activities { display:grid; grid-template-columns:1.07fr .93fr; gap:70px; align-items:start; }
+    .activity-list { border-top:1px solid var(--line); }
+    .activity { display:grid; grid-template-columns:62px 1fr; gap:20px; padding:23px 0; border-bottom:1px solid var(--line); }
+    .activity-icon { display:grid; width:52px; height:52px; place-items:center; border-radius:50%; color:var(--forest); background:#e4e9c6; font-size:1.35rem; }
+    .activity h3 { margin:3px 0 7px; font-size:1.05rem; }
+    .activity p { margin:0; color:var(--muted); font-size:.86rem; line-height:1.6; }
+    .activity-aside { padding:31px; color:#fff; background:var(--clay); }
+    .activity-aside h3 { max-width:300px; font-size:2rem; line-height:1.05; }
+    .activity-aside p { color:#fde1d7; font-size:.9rem; line-height:1.7; }
+    .aside-rule { width:100%; height:1px; margin:26px 0; background:rgba(255,255,255,.32); }
+    .aside-note { display:flex; justify-content:space-between; gap:15px; font-size:.78rem; }
+    .aside-note strong { font-family:Manrope,sans-serif; font-size:1.2rem; }
+    .gallery { display:grid; grid-template-columns:1.1fr 1fr 1fr; grid-template-rows:330px; gap:12px; }
+    .gallery img { width:100%; height:100%; border-radius:6px; object-fit:cover; }
+    .gallery img:last-child { object-fit:contain; background:#fffdf8; }
+    .support { display:grid; grid-template-columns:1fr .9fr; gap:56px; align-items:center; padding:53px; background:#e4e9c6; }
+    .support h2 { max-width:420px; font-size:clamp(2.1rem,4vw,3.8rem); line-height:1; }
+    .support p { max-width:440px; color:#536550; font-size:.9rem; line-height:1.7; }
+    .token-box { padding:25px; background:var(--cream); box-shadow:0 12px 30px rgba(23,54,43,.08); }
+    .token-box label { display:block; margin-bottom:7px; color:var(--muted); font-size:.76rem; font-weight:700; }
+    .token-box input { width:100%; min-height:44px; margin-bottom:14px; padding:0 12px; border:1px solid var(--line); border-radius:4px; color:var(--ink); background:#fff; font:inherit; }
+    .token-total { display:flex; justify-content:space-between; margin:2px 0 17px; padding:12px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-size:.82rem; }
+    .token-total strong { color:var(--clay); font-family:Manrope,sans-serif; font-size:1.2rem; }
+    .token-result { margin-top:15px; padding:14px; color:var(--forest); background:#edf2db; font-size:.78rem; line-height:1.5; }
+    .token-result[hidden] { display:none; }
+    footer { padding:32px 0; color:#c9d7ca; background:#102c22; }
+    .footer-row { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .footer-row p { margin:0; font-size:.74rem; }
+    .footer-brand { color:#fff; font:800 1rem Manrope,sans-serif; }
+    @media (max-width:800px) { nav { display:none; } .menu-button { display:block; } nav.open { position:absolute; top:78px; right:20px; z-index:5; display:flex; flex-direction:column; align-items:flex-start; gap:15px; min-width:180px; padding:18px; border:1px solid var(--line); background:var(--cream); box-shadow:var(--shadow); } .hero,.activities,.support { grid-template-columns:1fr; } .hero { gap:43px; padding-top:28px; } .hero-art::after { right:0; } .hero-stamp { right:0; } .principles { grid-template-columns:1fr; } .principle,.principle:not(:first-child) { padding:24px 0; border-right:0; border-bottom:1px solid rgba(255,255,255,.2); } .section-head { display:block; } .section-head p { margin-top:18px; } .gallery { grid-template-columns:1fr 1fr; grid-template-rows:230px 170px; } .gallery img:last-child { grid-column:1 / span 2; } .support { padding:30px 22px; gap:30px; } }
+    @media (max-width:500px) { .container { width:min(100% - 28px,1160px); } .topbar { padding:15px 0; } .hero { padding-bottom:60px; } h1 { font-size:3.55rem; } .hero-actions { align-items:flex-start; flex-direction:column; gap:16px; } .hero-image { border-radius:95px 8px 8px 8px; } .section { padding:65px 0; } .gallery { grid-template-rows:190px 145px; } .footer-row { align-items:flex-start; flex-direction:column; } }
   </style>
 </head>
 <body>
-  <main class="page-shell">
-    <article class="card">
-      <header class="card-header">
-        <img class="brand-logo" src="logo.jpeg" alt="Thrishul Youth Group logo">
-        <h1>Laddu Token</h1>
-        <p class="header-copy">Reserve your entries with a little sweetness. Each token is ₹20.</p>
-      </header>
-
-      <div class="content">
-        <section id="entry-step" aria-labelledby="entry-step-title">
-          <p class="step-label" id="entry-step-title">Choose your entries</p>
-          <form id="entry-form" novalidate>
-            <div class="field">
-              <label for="name">Your name</label>
-              <input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="e.g. Asha Patel" required>
-              <span class="field-hint">This name appears in your payment note.</span>
-            </div>
-            <div class="field">
-              <label for="entries">Number of entries</label>
-              <input id="entries" name="entries" type="number" min="1" max="50" step="1" value="1" inputmode="numeric" required>
-              <span class="field-hint">Choose between 1 and 50 entries.</span>
-            </div>
-            <p class="error" id="form-error" role="alert" aria-live="polite"></p>
-            <div class="amount-strip" aria-live="polite">
-              <span>Total amount</span>
-              <strong id="live-total">₹20</strong>
-            </div>
-            <button id="confirm-button" type="submit" disabled>Confirm entries</button>
-          </form>
-        </section>
-
-        <section id="payment-result" class="payment-panel hidden" aria-labelledby="payment-title">
-          <h2 id="payment-title">Copy to pay</h2>
-          <p>Copy the UPI ID first. Then open your preferred app, paste the ID, and enter <strong id="manual-pay-amount"></strong>.</p>
-          <div class="upi-details">
-            <div><span>Merchant UPI ID</span><strong id="merchant-upi-id"></strong></div>
-            <button id="copy-upi-button" class="copy-button" type="button">Copy</button>
-          </div>
-          <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
-          <div id="app-popover" class="app-popover hidden" role="dialog" aria-label="Choose a payment app">
-            <button id="close-app-popover" class="app-popover-close" type="button" aria-label="Close payment app options">&times;</button>
-            <p class="app-popover-title">UPI ID copied</p>
-            <p id="app-note" class="app-note"><strong>Paste the copied UPI ID into PhonePe and enter the displayed amount to pay.</strong> For GPay or Paytm, open the app manually and pay to the UPI ID shown above.</p>
-            <div id="app-links" class="app-links" aria-label="Payment apps">
-              <a id="phonepe-link" class="app-link" href="phonepe://pay"><img class="app-logo" src="phonepe.svg" alt="PhonePe"><span>Open PhonePe</span></a>
-            </div>
-          </div>
-          <div class="qr-frame" id="qr-frame">
-            <div id="qrcode" aria-label="UPI payment QR code"></div>
-            <p id="qr-fallback" class="qr-fallback hidden">The QR code could not load. Copy the UPI ID and pay manually in your app.</p>
-          </div>
-          <a id="download-qr" class="download-qr" href="#" download="laddu-token-payment-qr.png">Download QR code</a>
-          <p class="success-note">If an app button does not open, copy the UPI ID and pay manually in your app.</p>
-          <p class="fine-print"><strong>Practice demo:</strong> After paying, please screenshot your payment confirmation. This page cannot verify payments automatically. It has no backend, database, authentication, or payment gateway.</p>
-        </section>
-      </div>
-    </article>
+  <header class="container topbar">
+    <a class="brand" href="#top"><img src="logo.jpeg" alt="Thrishul Youth logo"><span>THRISHUL<small>GANAPATHI YOUTH GROUP</small></span></a>
+    <button class="menu-button" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <nav aria-label="Primary navigation"><a href="#why">Why we gather</a><a href="#work">Our work</a><a href="#moments">Moments</a><a class="nav-cta" href="#support">Support us</a></nav>
+  </header>
+  <main id="top">
+    <section class="container hero">
+      <div><p class="eyebrow">Ganapati youth group · since 2018</p><h1>A festival that <em>grows</em> with us.</h1><p class="hero-copy">Thrishul Youth brings people together around clay Ganesh idols, living green spaces and joyful learning. Our celebration leaves behind more than memories.</p><div class="hero-actions"><a class="button" href="#work">See what we do</a><a class="text-link" href="#support">Get a laddu token</a></div></div>
+      <div class="hero-art"><img class="hero-image" src="WhatsApp Image 2026-09-14 at 10.42.13 PM.jpeg" alt="Thrishul Youth members together outdoors"><div class="hero-stamp"><span><strong>100%</strong>made with<br>community</span></div></div>
+    </section>
+    <section class="mission-band section" id="why"><div class="container"><div class="section-head"><div><p class="eyebrow">Our reason to gather</p><h2>Devotion with both feet on the ground.</h2></div><p>We keep the spirit of Ganesh Chaturthi close to the earth: thoughtful materials, generous sharing and space for young minds to make something of their own.</p></div><div class="principles"><article class="principle"><span class="principle-number">01</span><h3>Celebrate lightly</h3><p>Our Ganesh idol is made with clay, so devotion can return gently to the soil.</p></article><article class="principle"><span class="principle-number">02</span><h3>Plant the next season</h3><p>Every tree we plant is a small promise that keeps working after the lights go out.</p></article><article class="principle"><span class="principle-number">03</span><h3>Make room for ideas</h3><p>Essay and drawing competitions help school students find their own way to imagine change.</p></article></div></div></section>
+    <section class="section" id="work"><div class="container activities"><div><div class="section-head"><div><p class="eyebrow">What we put our hands to</p><h2>Good work, done together.</h2></div></div><div class="activity-list"><article class="activity"><span class="activity-icon">♧</span><div><h3>Clay Ganesh idol</h3><p>A beautiful, earth-friendly murti made for a celebration that respects where we live.</p></div></article><article class="activity"><span class="activity-icon">✦</span><div><h3>Tree planting days</h3><p>We turn collective energy into shade, roots and greener streets for the years ahead.</p></div></article><article class="activity"><span class="activity-icon">✎</span><div><h3>School competitions</h3><p>Essay and drawing competitions invite students to express what a better future looks like.</p></div></article></div></div><aside class="activity-aside"><p class="eyebrow">Our annual rhythm</p><h3>There is always another way to share.</h3><p>From fruits on a special day to 108 prasadhs and our annual anna prasadhan, food is how our circle becomes wider.</p><div class="aside-rule"></div><div class="aside-note"><span>Shared every year</span><strong>108+</strong></div></aside></div></section>
+    <section class="section" id="moments"><div class="container"><div class="section-head"><div><p class="eyebrow">A few moments</p><h2>The people are the celebration.</h2></div><p>Every tree, plate, sketch and smile is part of the same living tradition.</p></div><div class="gallery"><img src="WhatsApp Image 2026-09-14 at 8.53.19 PM.jpeg" alt="Volunteers together"><img src="WhatsApp Image 2026-09-14 at 7.58.56 PM.jpeg" alt="Community celebration"><img src="WhatsApp Image 2026-09-18 at 5.40.19 PM.jpeg" alt="Thrishul Youth Ganapati celebration"></div></div></section>
+    <section class="container section" id="support"><div class="support"><div><p class="eyebrow">Laddu token</p><h2>Add a little sweetness to the work.</h2><p>Reserve your entries for ₹20 each. This uses the existing Laddu Token practice-payment flow. After confirming, you will get the UPI details to complete payment in your preferred app.</p></div><form class="token-box" id="token-form"><label for="supporter-name">Your name</label><input id="supporter-name" name="name" type="text" placeholder="e.g. Asha Patel" required><label for="token-count">Number of entries</label><input id="token-count" name="entries" type="number" min="1" max="50" value="1" required><div class="token-total"><span>Total amount</span><strong id="token-total">₹20</strong></div><button class="button" type="submit">Continue to payment</button><div class="token-result" id="token-result" hidden></div></form></div></section>
   </main>
-
+  <footer><div class="container footer-row"><span class="footer-brand">THRISHUL YOUTH</span><p>Eco-friendly minds. Positive change.</p><p>© 2026 Thrishul Youth</p></div></footer>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script>
-    // Replace these sample values for local experimentation. This page does not process real payments.
-    const MERCHANT_UPI_ID = 'abhishekabsk28@ybl';
-    const PAYEE_NAME = 'Laddu Token Demo';
-    const PRICE_PER_ENTRY = 20;
-    const MAX_ENTRIES = 50;
-
-    const entryForm = document.querySelector('#entry-form');
-    const nameInput = document.querySelector('#name');
-    const entriesInput = document.querySelector('#entries');
-    const confirmButton = document.querySelector('#confirm-button');
-    const formError = document.querySelector('#form-error');
-    const liveTotal = document.querySelector('#live-total');
-    const entryStep = document.querySelector('#entry-step');
-    const paymentResult = document.querySelector('#payment-result');
-    const merchantUpiId = document.querySelector('#merchant-upi-id');
-    const copyUpiButton = document.querySelector('#copy-upi-button');
-    const copyStatus = document.querySelector('#copy-status');
-    const appPopover = document.querySelector('#app-popover');
-    const closeAppPopover = document.querySelector('#close-app-popover');
-    const manualPayAmount = document.querySelector('#manual-pay-amount');
-    const phonePeLink = document.querySelector('#phonepe-link');
-    const qrCode = document.querySelector('#qrcode');
-    const qrFallback = document.querySelector('#qr-fallback');
-    const downloadQr = document.querySelector('#download-qr');
-
-    let order = null;
-
-    function getEntryCount() {
-      const value = Number(entriesInput.value);
-      return Number.isInteger(value) && value >= 1 && value <= MAX_ENTRIES ? value : null;
-    }
-
-    function getName() {
-      return nameInput.value.trim();
-    }
-
-    function updateTotal() {
-      const entries = getEntryCount();
-      liveTotal.textContent = `₹${entries ? entries * PRICE_PER_ENTRY : 0}`;
-      confirmButton.disabled = !getName() || entries === null;
-    }
-
-    function showFormError(message) {
-      formError.textContent = message;
-    }
-
-    function encodeUpiValue(value) {
-      return encodeURIComponent(value);
-    }
-
-    function setAppLinksForPlatform() {
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      phonePeLink.href = isIOS
-        ? 'https://apps.apple.com/in/search?term=PhonePe'
-        : 'phonepe://pay';
-    }
-
-    function setQrDownloadLink() {
-      const qrCanvas = qrCode.querySelector('canvas');
-      const qrImage = qrCode.querySelector('img');
-      const qrDataUrl = qrCanvas ? qrCanvas.toDataURL('image/png') : qrImage?.src;
-
-      if (qrDataUrl) {
-        downloadQr.href = qrDataUrl;
-        downloadQr.classList.remove('hidden');
-      } else {
-        downloadQr.removeAttribute('href');
-        downloadQr.classList.add('hidden');
-      }
-    }
-
-    merchantUpiId.textContent = MERCHANT_UPI_ID;
-    setAppLinksForPlatform();
-
-    copyUpiButton.addEventListener('click', async () => {
-      appPopover.classList.remove('hidden');
-      copyStatus.textContent = 'Opening options... Copy the ID into your chosen app.';
-      try {
-        await navigator.clipboard.writeText(MERCHANT_UPI_ID);
-        copyStatus.textContent = 'UPI ID copied. Open an app below and paste it.';
-      } catch {
-        copyStatus.textContent = `Copy it manually: ${MERCHANT_UPI_ID}`;
-      }
-    });
-
-    closeAppPopover.addEventListener('click', () => {
-      appPopover.classList.add('hidden');
-    });
-
-    nameInput.addEventListener('input', () => {
-      showFormError('');
-      updateTotal();
-    });
-
-    entriesInput.addEventListener('input', () => {
-      showFormError('');
-      updateTotal();
-    });
-
-    function showPaymentOptions() {
-      if (!order) return;
-
-      const note = `Laddu-Token-${order.name}-${order.entries}entries`;
-      const upiLink = [
-        ['pa', MERCHANT_UPI_ID],
-        ['pn', PAYEE_NAME],
-        ['am', order.amount.toFixed(2)],
-        ['cu', 'INR'],
-        ['tn', note]
-      ].map(([key, value]) => `${key}=${encodeUpiValue(value)}`).join('&');
-      const paymentUri = `upi://pay?${upiLink}`;
-
-      manualPayAmount.textContent = `₹${order.amount}`;
-      appPopover.classList.add('hidden');
-      qrCode.replaceChildren();
-      qrFallback.classList.add('hidden');
-      downloadQr.classList.add('hidden');
-
-      if (typeof QRCode === 'function') {
-        new QRCode(qrCode, {
-          text: paymentUri,
-          width: 200,
-          height: 200,
-          colorDark: '#3e2114',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-        setQrDownloadLink();
-      } else {
-        qrFallback.classList.remove('hidden');
-      }
-
-      paymentResult.classList.remove('hidden');
-      paymentResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    entryForm.addEventListener('submit', (event) => {
+    const menuButton = document.querySelector('.menu-button');
+    const nav = document.querySelector('nav');
+    menuButton.addEventListener('click', () => { const open = nav.classList.toggle('open'); menuButton.setAttribute('aria-expanded', open); });
+    const count = document.querySelector('#token-count');
+    const total = document.querySelector('#token-total');
+    const result = document.querySelector('#token-result');
+    const price = 20;
+    function updateTokenTotal() { const entries = Math.max(1, Math.min(50, Number(count.value) || 1)); total.textContent = `₹${entries * price}`; }
+    count.addEventListener('input', updateTokenTotal);
+    document.querySelector('#token-form').addEventListener('submit', (event) => {
       event.preventDefault();
-      const name = getName();
-      const entries = getEntryCount();
-
-      if (!name) {
-        showFormError('Please enter your name.');
-        nameInput.focus();
-        return;
-      }
-      if (entries === null) {
-        showFormError(`Please choose a whole number from 1 to ${MAX_ENTRIES}.`);
-        entriesInput.focus();
-        return;
-      }
-
-      order = { name, entries, amount: entries * PRICE_PER_ENTRY };
-      entryStep.classList.add('hidden');
-      showPaymentOptions();
+      const name = document.querySelector('#supporter-name').value.trim();
+      const entries = Math.max(1, Math.min(50, Number(count.value) || 1));
+      const amount = entries * price;
+      const note = encodeURIComponent(`Laddu-Token-${name}-${entries}entries`);
+      const paymentUri = `upi://pay?pa=abhishekabsk28@ybl&pn=Laddu%20Token%20Demo&am=${amount.toFixed(2)}&cu=INR&tn=${note}`;
+      result.hidden = false;
+      result.innerHTML = `<strong>Payment details ready.</strong><br>Pay ₹${amount} to <strong>abhishekabsk28@ybl</strong> in your UPI app. <span id="qr-slot"></span><br><small>Practice demo: this page cannot verify payments automatically.</small>`;
+      const qrSlot = document.querySelector('#qr-slot');
+      if (typeof QRCode === 'function') new QRCode(qrSlot, { text: paymentUri, width: 120, height: 120, colorDark: '#194d37', colorLight: '#edf2db' });
+      result.scrollIntoView({ behavior:'smooth', block:'center' });
     });
-
-    updateTotal();
+    updateTokenTotal();
   </script>
 </body>
 </html>
