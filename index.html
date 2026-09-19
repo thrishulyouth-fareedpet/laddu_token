@@ -293,7 +293,8 @@
     .copy-status { min-height: 1.2em; margin: -8px 0 14px !important; color: var(--green) !important; font-size: 0.76rem !important; }
 
     .app-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 18px; }
-    .app-link { min-height: 48px; padding: 8px; font-size: 0.78rem; text-align: center; }
+    .app-link { min-height: 76px; padding: 10px 7px; flex-direction: column; gap: 6px; font-size: 0.74rem; text-align: center; }
+    .app-logo { width: 28px; height: 28px; object-fit: contain; border-radius: 7px; background: #fff; }
 
     .qr-frame {
       display: grid;
@@ -377,17 +378,17 @@
         </section>
 
         <section id="payment-result" class="payment-panel hidden" aria-labelledby="payment-title">
-          <h2 id="payment-title">Your link is ready</h2>
-          <p>Choose an installed payment app, or copy the UPI ID and enter the amount manually.</p>
+          <h2 id="payment-title">Copy to pay</h2>
+          <p>Copy the UPI ID first. Then open your preferred app, paste the ID, and enter <strong id="manual-pay-amount"></strong>.</p>
           <div class="upi-details">
             <div><span>Merchant UPI ID</span><strong id="merchant-upi-id"></strong></div>
             <button id="copy-upi-button" class="copy-button" type="button">Copy</button>
           </div>
           <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
-          <div class="app-links" aria-label="Payment apps">
-            <a id="gpay-link" class="app-link" href="#">Open GPay</a>
-            <a id="phonepe-link" class="app-link" href="#">Open PhonePe</a>
-            <a id="paytm-link" class="app-link" href="#">Open Paytm</a>
+          <div id="app-links" class="app-links hidden" aria-label="Payment apps">
+            <a id="gpay-link" class="app-link" href="#"><img class="app-logo" src="https://cdn.simpleicons.org/googlepay/4285F4" alt=""><span>Open GPay</span></a>
+            <a id="phonepe-link" class="app-link" href="#"><img class="app-logo" src="https://cdn.simpleicons.org/phonepe/5F259F" alt=""><span>Open PhonePe</span></a>
+            <a id="paytm-link" class="app-link" href="#"><img class="app-logo" src="https://cdn.simpleicons.org/paytm/00BAF2" alt=""><span>Open Paytm</span></a>
           </div>
           <div class="qr-frame" id="qr-frame">
             <div id="qrcode" aria-label="UPI payment QR code"></div>
@@ -426,6 +427,8 @@
     const merchantUpiId = document.querySelector('#merchant-upi-id');
     const copyUpiButton = document.querySelector('#copy-upi-button');
     const copyStatus = document.querySelector('#copy-status');
+    const appLinks = document.querySelector('#app-links');
+    const manualPayAmount = document.querySelector('#manual-pay-amount');
     const gpayLink = document.querySelector('#gpay-link');
     const phonePeLink = document.querySelector('#phonepe-link');
     const paytmLink = document.querySelector('#paytm-link');
@@ -458,10 +461,6 @@
       return encodeURIComponent(value);
     }
 
-    function appPaymentUri(scheme, upiLink) {
-      return `${scheme}${upiLink}`;
-    }
-
     function setQrDownloadLink() {
       const qrCanvas = qrCode.querySelector('canvas');
       const qrImage = qrCode.querySelector('img');
@@ -479,11 +478,13 @@
     merchantUpiId.textContent = MERCHANT_UPI_ID;
 
     copyUpiButton.addEventListener('click', async () => {
+      appLinks.classList.remove('hidden');
+      copyStatus.textContent = 'Opening options... Copy the ID into your chosen app.';
       try {
         await navigator.clipboard.writeText(MERCHANT_UPI_ID);
-        copyStatus.textContent = 'UPI ID copied.';
+        copyStatus.textContent = 'UPI ID copied. Open an app below and paste it.';
       } catch {
-        copyStatus.textContent = `Copy failed. UPI ID: ${MERCHANT_UPI_ID}`;
+        copyStatus.textContent = `Copy it manually: ${MERCHANT_UPI_ID}`;
       }
     });
 
@@ -543,11 +544,12 @@
         ['tn', note]
       ].map(([key, value]) => `${key}=${encodeUpiValue(value)}`).join('&');
       const paymentUri = `upi://pay?${upiLink}`;
-      const upiIdOnly = `pa=${encodeUpiValue(MERCHANT_UPI_ID)}`;
 
-      gpayLink.href = appPaymentUri('tez://upi/pay?', upiIdOnly);
-      phonePeLink.href = appPaymentUri('phonepe://pay?', upiIdOnly);
-      paytmLink.href = appPaymentUri('paytmmp://pay?', upiIdOnly);
+      manualPayAmount.textContent = `₹${order.amount}`;
+      gpayLink.href = 'intent://#Intent;scheme=tez;package=com.google.android.apps.walletnfcrel;end';
+      phonePeLink.href = 'intent://#Intent;scheme=phonepe;package=com.phonepe.app;end';
+      paytmLink.href = 'intent://#Intent;scheme=paytmmp;package=net.one97.paytm;end';
+      appLinks.classList.add('hidden');
       qrCode.replaceChildren();
       qrFallback.classList.add('hidden');
       downloadQr.classList.add('hidden');
