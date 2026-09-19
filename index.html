@@ -299,7 +299,18 @@
     .phonepe-badge { background: #5f259f; }
     .paytm-badge { width: auto; min-width: 30px; padding: 0 4px; background: #00a9e8; font-size: 0.65rem; }
     .app-link span:last-child { color: inherit; }
-    .app-note { margin: -7px 0 18px !important; color: var(--muted); font-size: 0.74rem !important; }
+    .app-popover {
+      margin: 5px 0 20px;
+      padding: 15px;
+      border: 1px solid #efdba9;
+      border-radius: 10px;
+      background: #fff9e9;
+      box-shadow: 0 10px 24px rgba(76, 16, 34, 0.1);
+      text-align: left;
+    }
+
+    .app-popover-title { margin: 0 0 5px !important; color: var(--ink) !important; font-size: 0.88rem !important; font-weight: 700; }
+    .app-note { margin: 0 0 13px !important; color: var(--muted); font-size: 0.74rem !important; }
 
     .qr-frame {
       display: grid;
@@ -390,12 +401,15 @@
             <button id="copy-upi-button" class="copy-button" type="button">Copy</button>
           </div>
           <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
-          <div id="app-links" class="app-links hidden" aria-label="Payment apps">
-            <a id="gpay-link" class="app-link" href="tez://upi/pay"><span class="app-badge gpay-badge" aria-hidden="true">G</span><span>Open GPay</span></a>
-            <a id="phonepe-link" class="app-link" href="phonepe://pay"><span class="app-badge phonepe-badge" aria-hidden="true">P</span><span>Open PhonePe</span></a>
-            <a id="paytm-link" class="app-link" href="paytmmp://pay"><span class="app-badge paytm-badge" aria-hidden="true">Pay</span><span>Open Paytm</span></a>
+          <div id="app-popover" class="app-popover hidden" role="dialog" aria-label="Choose a payment app">
+            <p class="app-popover-title">UPI ID copied</p>
+            <p id="app-note" class="app-note">Open an app below, paste the copied UPI ID, and enter the displayed amount to pay.</p>
+            <div id="app-links" class="app-links" aria-label="Payment apps">
+              <a id="gpay-link" class="app-link" href="intent://#Intent;package=com.google.android.apps.walletnfcrel;end"><span class="app-badge gpay-badge" aria-hidden="true">G</span><span>Open GPay</span></a>
+              <a id="phonepe-link" class="app-link" href="phonepe://pay"><span class="app-badge phonepe-badge" aria-hidden="true">P</span><span>Open PhonePe</span></a>
+              <a id="paytm-link" class="app-link" href="intent://#Intent;package=net.one97.paytm;end"><span class="app-badge paytm-badge" aria-hidden="true">Pay</span><span>Open Paytm</span></a>
+            </div>
           </div>
-          <p id="app-note" class="app-note hidden">These app links work on Android when the app is installed. Paste the copied UPI ID and enter the displayed amount.</p>
           <div class="qr-frame" id="qr-frame">
             <div id="qrcode" aria-label="UPI payment QR code"></div>
             <p id="qr-fallback" class="qr-fallback hidden">The QR code could not load. Copy the UPI ID and pay manually in your app.</p>
@@ -433,8 +447,7 @@
     const merchantUpiId = document.querySelector('#merchant-upi-id');
     const copyUpiButton = document.querySelector('#copy-upi-button');
     const copyStatus = document.querySelector('#copy-status');
-    const appLinks = document.querySelector('#app-links');
-    const appNote = document.querySelector('#app-note');
+    const appPopover = document.querySelector('#app-popover');
     const manualPayAmount = document.querySelector('#manual-pay-amount');
     const gpayLink = document.querySelector('#gpay-link');
     const phonePeLink = document.querySelector('#phonepe-link');
@@ -485,8 +498,7 @@
     merchantUpiId.textContent = MERCHANT_UPI_ID;
 
     copyUpiButton.addEventListener('click', async () => {
-      appLinks.classList.remove('hidden');
-      appNote.classList.remove('hidden');
+      appPopover.classList.remove('hidden');
       copyStatus.textContent = 'Opening options... Copy the ID into your chosen app.';
       try {
         await navigator.clipboard.writeText(MERCHANT_UPI_ID);
@@ -554,8 +566,7 @@
       const paymentUri = `upi://pay?${upiLink}`;
 
       manualPayAmount.textContent = `₹${order.amount}`;
-      appLinks.classList.add('hidden');
-      appNote.classList.add('hidden');
+      appPopover.classList.add('hidden');
       qrCode.replaceChildren();
       qrFallback.classList.add('hidden');
       downloadQr.classList.add('hidden');
