@@ -399,11 +399,9 @@
           <div id="app-popover" class="app-popover hidden" role="dialog" aria-label="Choose a payment app">
             <button id="close-app-popover" class="app-popover-close" type="button" aria-label="Close payment app options">&times;</button>
             <p class="app-popover-title">UPI ID copied</p>
-            <p id="app-note" class="app-note"><strong>Paste the copied UPI ID into your chosen app and enter the displayed amount to pay.</strong> On iPhone, the PhonePe option opens the App Store search if iOS cannot open PhonePe directly.</p>
+            <p id="app-note" class="app-note"><strong>Paste the copied UPI ID into PhonePe and enter the displayed amount to pay.</strong> For GPay or Paytm, open the app manually and pay to the UPI ID shown above.</p>
             <div id="app-links" class="app-links" aria-label="Payment apps">
-              <a id="gpay-link" class="app-link" href="intent://upi/pay#Intent;scheme=tez;package=com.google.android.apps.nbu.paisa.user;end"><img class="app-logo" src="gpay.svg" alt="Google Pay"><span>Open GPay</span></a>
               <a id="phonepe-link" class="app-link" href="phonepe://pay"><img class="app-logo" src="phonepe.svg" alt="PhonePe"><span>Open PhonePe</span></a>
-              <a id="paytm-link" class="app-link" href="intent://#Intent;package=net.one97.paytm;end"><img class="app-logo" src="paytm.svg" alt="Paytm"><span>Open Paytm</span></a>
             </div>
           </div>
           <div class="qr-frame" id="qr-frame">
@@ -440,9 +438,7 @@
     const appPopover = document.querySelector('#app-popover');
     const closeAppPopover = document.querySelector('#close-app-popover');
     const manualPayAmount = document.querySelector('#manual-pay-amount');
-    const gpayLink = document.querySelector('#gpay-link');
     const phonePeLink = document.querySelector('#phonepe-link');
-    const paytmLink = document.querySelector('#paytm-link');
     const qrCode = document.querySelector('#qrcode');
     const qrFallback = document.querySelector('#qr-fallback');
     const downloadQr = document.querySelector('#download-qr');
@@ -473,17 +469,10 @@
     }
 
     function setAppLinksForPlatform() {
-      const isAndroid = /Android/i.test(navigator.userAgent);
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      gpayLink.href = isAndroid
-        ? 'intent://upi/pay#Intent;scheme=tez;package=com.google.android.apps.nbu.paisa.user;end'
-        : 'tez://upi/pay';
       phonePeLink.href = isIOS
         ? 'https://apps.apple.com/in/search?term=PhonePe'
         : 'phonepe://pay';
-      paytmLink.href = isAndroid
-        ? 'intent://#Intent;package=net.one97.paytm;end'
-        : 'paytmmp://pay';
     }
 
     function setQrDownloadLink() {
