@@ -293,11 +293,9 @@
     .copy-status { min-height: 1.2em; margin: -8px 0 14px !important; color: var(--green) !important; font-size: 0.76rem !important; }
 
     .app-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 18px; }
-    .app-link { min-height: 76px; padding: 10px 7px; flex-direction: column; gap: 6px; font-size: 0.74rem; text-align: center; }
-    .app-badge { display: inline-grid; width: 30px; height: 30px; place-items: center; border-radius: 9px; color: #fff; font: 800 1rem 'Trebuchet MS', sans-serif; }
-    .gpay-badge { background: #4285f4; }
-    .phonepe-badge { background: #5f259f; }
-    .paytm-badge { width: auto; min-width: 30px; padding: 0 4px; background: #00a9e8; font-size: 0.65rem; }
+    .app-link { min-height: 76px; padding: 10px 7px; flex-direction: column; gap: 6px; color: var(--ink); background: transparent; box-shadow: none; font-size: 0.74rem; text-align: center; }
+    .app-link:hover { color: var(--orange-dark); background: transparent; box-shadow: none; transform: none; }
+    .app-logo { display: block; width: 36px; height: 36px; object-fit: contain; }
     .app-link span:last-child { color: inherit; }
     .app-popover {
       position: fixed;
@@ -390,17 +388,6 @@
           </form>
         </section>
 
-        <section id="confirmation-step" class="hidden" aria-labelledby="confirmation-title">
-          <p class="step-label" id="confirmation-title">Review your order</p>
-          <div class="summary" aria-label="Entry summary">
-            <div class="summary-row"><span>Name</span><strong id="summary-name"></strong></div>
-            <div class="summary-row"><span>Entries</span><strong id="summary-entries"></strong></div>
-            <div class="summary-row"><span>Total</span><strong id="summary-total"></strong></div>
-          </div>
-          <button id="generate-button" type="button">Show payment options</button>
-          <button id="edit-button" class="secondary-action" type="button">Edit entries</button>
-        </section>
-
         <section id="payment-result" class="payment-panel hidden" aria-labelledby="payment-title">
           <h2 id="payment-title">Copy to pay</h2>
           <p>Copy the UPI ID first. Then open your preferred app, paste the ID, and enter <strong id="manual-pay-amount"></strong>.</p>
@@ -412,11 +399,11 @@
           <div id="app-popover" class="app-popover hidden" role="dialog" aria-label="Choose a payment app">
             <button id="close-app-popover" class="app-popover-close" type="button" aria-label="Close payment app options">&times;</button>
             <p class="app-popover-title">UPI ID copied</p>
-            <p id="app-note" class="app-note">Paste the copied UPI ID into your chosen app and enter the displayed amount. On iPhone, the PhonePe option opens the App Store search if iOS cannot open PhonePe directly.</p>
+            <p id="app-note" class="app-note"><strong>Paste the copied UPI ID into your chosen app and enter the displayed amount to pay.</strong> On iPhone, the PhonePe option opens the App Store search if iOS cannot open PhonePe directly.</p>
             <div id="app-links" class="app-links" aria-label="Payment apps">
-              <a id="gpay-link" class="app-link" href="intent://upi/pay#Intent;scheme=tez;package=com.google.android.apps.walletnfcrel;end"><span class="app-badge gpay-badge" aria-hidden="true">G</span><span>Open GPay</span></a>
-              <a id="phonepe-link" class="app-link" href="phonepe://pay"><span class="app-badge phonepe-badge" aria-hidden="true">P</span><span>Open PhonePe</span></a>
-              <a id="paytm-link" class="app-link" href="intent://#Intent;package=net.one97.paytm;end"><span class="app-badge paytm-badge" aria-hidden="true">Pay</span><span>Open Paytm</span></a>
+              <a id="gpay-link" class="app-link" href="intent://upi/pay#Intent;scheme=tez;package=com.google.android.apps.nbu.paisa.user;end"><img class="app-logo" src="gpay.svg" alt="Google Pay"><span>Open GPay</span></a>
+              <a id="phonepe-link" class="app-link" href="phonepe://pay"><img class="app-logo" src="phonepe.svg" alt="PhonePe"><span>Open PhonePe</span></a>
+              <a id="paytm-link" class="app-link" href="intent://#Intent;package=net.one97.paytm;end"><img class="app-logo" src="paytm.svg" alt="Paytm"><span>Open Paytm</span></a>
             </div>
           </div>
           <div class="qr-frame" id="qr-frame">
@@ -446,13 +433,7 @@
     const formError = document.querySelector('#form-error');
     const liveTotal = document.querySelector('#live-total');
     const entryStep = document.querySelector('#entry-step');
-    const confirmationStep = document.querySelector('#confirmation-step');
     const paymentResult = document.querySelector('#payment-result');
-    const summaryName = document.querySelector('#summary-name');
-    const summaryEntries = document.querySelector('#summary-entries');
-    const summaryTotal = document.querySelector('#summary-total');
-    const generateButton = document.querySelector('#generate-button');
-    const editButton = document.querySelector('#edit-button');
     const merchantUpiId = document.querySelector('#merchant-upi-id');
     const copyUpiButton = document.querySelector('#copy-upi-button');
     const copyStatus = document.querySelector('#copy-status');
@@ -495,7 +476,7 @@
       const isAndroid = /Android/i.test(navigator.userAgent);
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
       gpayLink.href = isAndroid
-        ? 'intent://upi/pay#Intent;scheme=tez;package=com.google.android.apps.walletnfcrel;end'
+        ? 'intent://upi/pay#Intent;scheme=tez;package=com.google.android.apps.nbu.paisa.user;end'
         : 'tez://upi/pay';
       phonePeLink.href = isIOS
         ? 'https://apps.apple.com/in/search?term=PhonePe'
@@ -547,41 +528,7 @@
       updateTotal();
     });
 
-    entryForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const name = getName();
-      const entries = getEntryCount();
-
-      if (!name) {
-        showFormError('Please enter your name.');
-        nameInput.focus();
-        return;
-      }
-      if (entries === null) {
-        showFormError(`Please choose a whole number from 1 to ${MAX_ENTRIES}.`);
-        entriesInput.focus();
-        return;
-      }
-
-      order = { name, entries, amount: entries * PRICE_PER_ENTRY };
-      summaryName.textContent = order.name;
-      summaryEntries.textContent = `${order.entries} ${order.entries === 1 ? 'entry' : 'entries'}`;
-      summaryTotal.textContent = `₹${order.amount}`;
-      entryStep.classList.add('hidden');
-      confirmationStep.classList.remove('hidden');
-      paymentResult.classList.add('hidden');
-      confirmationStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    editButton.addEventListener('click', () => {
-      confirmationStep.classList.add('hidden');
-      paymentResult.classList.add('hidden');
-      entryStep.classList.remove('hidden');
-      updateTotal();
-      nameInput.focus();
-    });
-
-    generateButton.addEventListener('click', () => {
+    function showPaymentOptions() {
       if (!order) return;
 
       const note = `Laddu-Token-${order.name}-${order.entries}entries`;
@@ -616,6 +563,27 @@
 
       paymentResult.classList.remove('hidden');
       paymentResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    entryForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = getName();
+      const entries = getEntryCount();
+
+      if (!name) {
+        showFormError('Please enter your name.');
+        nameInput.focus();
+        return;
+      }
+      if (entries === null) {
+        showFormError(`Please choose a whole number from 1 to ${MAX_ENTRIES}.`);
+        entriesInput.focus();
+        return;
+      }
+
+      order = { name, entries, amount: entries * PRICE_PER_ENTRY };
+      entryStep.classList.add('hidden');
+      showPaymentOptions();
     });
 
     updateTotal();
