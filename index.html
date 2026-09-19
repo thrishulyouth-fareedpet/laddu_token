@@ -294,7 +294,12 @@
 
     .app-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 18px; }
     .app-link { min-height: 76px; padding: 10px 7px; flex-direction: column; gap: 6px; font-size: 0.74rem; text-align: center; }
-    .app-logo { width: 28px; height: 28px; object-fit: contain; border-radius: 7px; background: #fff; }
+    .app-badge { display: inline-grid; width: 30px; height: 30px; place-items: center; border-radius: 9px; color: #fff; font: 800 1rem 'Trebuchet MS', sans-serif; }
+    .gpay-badge { background: #4285f4; }
+    .phonepe-badge { background: #5f259f; }
+    .paytm-badge { width: auto; min-width: 30px; padding: 0 4px; background: #00a9e8; font-size: 0.65rem; }
+    .app-link span:last-child { color: inherit; }
+    .app-note { margin: -7px 0 18px !important; color: var(--muted); font-size: 0.74rem !important; }
 
     .qr-frame {
       display: grid;
@@ -386,10 +391,11 @@
           </div>
           <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
           <div id="app-links" class="app-links hidden" aria-label="Payment apps">
-            <a id="gpay-link" class="app-link" href="#"><img class="app-logo" src="https://cdn.simpleicons.org/googlepay/4285F4" alt=""><span>Open GPay</span></a>
-            <a id="phonepe-link" class="app-link" href="#"><img class="app-logo" src="https://cdn.simpleicons.org/phonepe/5F259F" alt=""><span>Open PhonePe</span></a>
-            <a id="paytm-link" class="app-link" href="#"><img class="app-logo" src="https://cdn.simpleicons.org/paytm/00BAF2" alt=""><span>Open Paytm</span></a>
+            <button id="gpay-link" class="app-link" type="button"><span class="app-badge gpay-badge" aria-hidden="true">G</span><span>Open GPay</span></button>
+            <button id="phonepe-link" class="app-link" type="button"><span class="app-badge phonepe-badge" aria-hidden="true">P</span><span>Open PhonePe</span></button>
+            <button id="paytm-link" class="app-link" type="button"><span class="app-badge paytm-badge" aria-hidden="true">Pay</span><span>Open Paytm</span></button>
           </div>
+          <p id="app-note" class="app-note hidden">The app opens without payment details. Paste the copied UPI ID and enter the displayed amount.</p>
           <div class="qr-frame" id="qr-frame">
             <div id="qrcode" aria-label="UPI payment QR code"></div>
             <p id="qr-fallback" class="qr-fallback hidden">The QR code could not load. Copy the UPI ID and pay manually in your app.</p>
@@ -428,6 +434,7 @@
     const copyUpiButton = document.querySelector('#copy-upi-button');
     const copyStatus = document.querySelector('#copy-status');
     const appLinks = document.querySelector('#app-links');
+    const appNote = document.querySelector('#app-note');
     const manualPayAmount = document.querySelector('#manual-pay-amount');
     const gpayLink = document.querySelector('#gpay-link');
     const phonePeLink = document.querySelector('#phonepe-link');
@@ -461,6 +468,14 @@
       return encodeURIComponent(value);
     }
 
+    function openPaymentApp(scheme, appName) {
+      copyStatus.textContent = `Opening ${appName}. Paste the copied UPI ID and enter the amount.`;
+      window.location.href = scheme;
+      window.setTimeout(() => {
+        copyStatus.textContent = `${appName} did not open. Open it manually and paste the copied UPI ID.`;
+      }, 1200);
+    }
+
     function setQrDownloadLink() {
       const qrCanvas = qrCode.querySelector('canvas');
       const qrImage = qrCode.querySelector('img');
@@ -479,6 +494,7 @@
 
     copyUpiButton.addEventListener('click', async () => {
       appLinks.classList.remove('hidden');
+      appNote.classList.remove('hidden');
       copyStatus.textContent = 'Opening options... Copy the ID into your chosen app.';
       try {
         await navigator.clipboard.writeText(MERCHANT_UPI_ID);
@@ -487,6 +503,10 @@
         copyStatus.textContent = `Copy it manually: ${MERCHANT_UPI_ID}`;
       }
     });
+
+    gpayLink.addEventListener('click', () => openPaymentApp('tez://', 'GPay'));
+    phonePeLink.addEventListener('click', () => openPaymentApp('phonepe://', 'PhonePe'));
+    paytmLink.addEventListener('click', () => openPaymentApp('paytmmp://', 'Paytm'));
 
     nameInput.addEventListener('input', () => {
       showFormError('');
@@ -546,10 +566,8 @@
       const paymentUri = `upi://pay?${upiLink}`;
 
       manualPayAmount.textContent = `₹${order.amount}`;
-      gpayLink.href = 'intent://#Intent;scheme=tez;package=com.google.android.apps.walletnfcrel;end';
-      phonePeLink.href = 'intent://#Intent;scheme=phonepe;package=com.phonepe.app;end';
-      paytmLink.href = 'intent://#Intent;scheme=paytmmp;package=net.one97.paytm;end';
       appLinks.classList.add('hidden');
+      appNote.classList.add('hidden');
       qrCode.replaceChildren();
       qrFallback.classList.add('hidden');
       downloadQr.classList.add('hidden');
